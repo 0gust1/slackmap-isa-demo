@@ -15,9 +15,6 @@
 
 <SideMenu />
 
-<button class="text-xl bg-red-500">
-    lfzifjzoifj
-</button>
 
 <div class="bg-gray-500">
   {#if browser}

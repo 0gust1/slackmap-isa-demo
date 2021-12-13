@@ -3,12 +3,13 @@
     import {sideMenuOpen } from '$lib/menuStore'
     import CoordsDebug from '$lib/CoordsDebug.svelte';
     import ApIdataDebug from '$lib/APIdataDebug.svelte';
+    import BottomMenu from '$lib/BottomMenu.svelte';
     const openMenu = ()=>{
         sideMenuOpen.set(true)
     }
 </script>
 
-<header class="smap-over-leaflet fixed bg-blue-400 flex flex-col w-full">
+<header class="smap-over-leaflet fixed flex flex-col w-full bg-gray-700 bg-opacity-70 text-gray-200">
     <div class="flex">
         <h1>Slackmap dummy app 1</h1>
         <button on:click={openMenu}>open menu</button>
@@ -21,10 +22,10 @@
     <slot />
 </main>
 
-
-<footer class="smap-footer">
+<BottomMenu/>
+<!-- <footer class="smap-footer">
     <span class="bg-opacity-90 inline-block bg-indigo-100 px-1"> Proof Of Concept app</span>
-</footer>
+</footer> -->
 
 <style lang="postcss">
 	.smap-over-leaflet  {

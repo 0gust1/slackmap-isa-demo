@@ -1,7 +1,7 @@
 <script>
   import L from 'leaflet';
   import { LeafletMap, TileLayer, Marker, ScaleControl, CircleMarker } from 'svelte-leafletjs';
-
+  import AddButton from './AddButton.svelte';
   import DivIcon from '$lib/DivIcon.svelte';
   import { centerPos, bounds, dataFromAPI, zoom, viewPortCoordinates } from '$lib/coordinatesStore';
   import { onMount } from 'svelte';
@@ -19,7 +19,7 @@
     zoom: 11
   };
 
-  //const tileUrl = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
+  //const tileUrl ='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
   const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
   const tileLayerOptions = {
     minZoom: 0,
@@ -37,6 +37,7 @@
 
   onMount(() => {
     map = leafletMapElement.getMap();
+    map.attributionControl.setPosition('topright');
     dragZoomHandler();
     console.dir(map);
   });
@@ -80,6 +81,15 @@
     `;
   };
 
+  const getZoomTo = (poi) => {
+    return () => {
+      map.setView(
+        { lat: poi.coordinates.coordinates[1], lng: poi.coordinates.coordinates[0] },
+        poi.expansion_zoom
+      );
+    };
+  };
+
   const debouncedDragZoomHandler = debounce(dragZoomHandler, 300);
 </script>
 
@@ -97,7 +107,11 @@
       {#if $zoom >= MARKER_ZOOM_LEVEL}
         <Marker latLng={[poi.coordinates.coordinates[1], poi.coordinates.coordinates[0]]} />
       {:else}
-        <Marker latLng={[poi.coordinates.coordinates[1], poi.coordinates.coordinates[0]]}>
+        <Marker
+          events={['click']}
+          on:click={getZoomTo(poi)}
+          latLng={[poi.coordinates.coordinates[1], poi.coordinates.coordinates[0]]}
+        >
           <DivIcon
             options={{
               className: '',
@@ -109,12 +123,20 @@
     {/each}
     <ScaleControl bind:this={scaleControl} position="bottomleft" options={scaleControlOptions} />
   </LeafletMap>
+  <div class="over-map absolute right-8 bottom-8">
+    <AddButton/>
+  </div>
 </div>
 
 <style lang="postcss">
   .leaflet-container {
-    height: calc(100vh - theme(spacing.4));
+    /*  height: 100vh; */
+    height: calc(100vh - theme(spacing.8));
     width: 100vw;
+  }
+
+  .over-map{
+    z-index: 1000;
   }
 
   :global(.clusterIcon) {
@@ -129,7 +151,6 @@
   }
   :global(.cluster1 .count) {
     @apply bg-green-500 bg-opacity-70;
-    
   }
   :global(.cluster10) {
     @apply bg-yellow-500 bg-opacity-30;
