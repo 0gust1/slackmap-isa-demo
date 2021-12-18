@@ -43,7 +43,7 @@ export const dataFromAPI = derived(viewPortCoordinates, ($viewPortCoordinates, s
 
     let APIFeaturesEndpoint = '';
 
-    if (zoom > 17) {
+    if (zoom >= 17) {
       APIFeaturesEndpoint = API_URLS.spots;
     } else {
       APIFeaturesEndpoint = API_URLS.clusters;

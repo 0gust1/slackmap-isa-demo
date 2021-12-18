@@ -1,17 +1,19 @@
 <script>
   import L from 'leaflet';
-  import { LeafletMap, TileLayer, Marker, ScaleControl, CircleMarker } from 'svelte-leafletjs';
+  import { LeafletMap, TileLayer, Marker, ScaleControl } from 'svelte-leafletjs';
+  import Spot from '$lib/Spot.svelte';
   import AddButton from './AddButton.svelte';
   import DivIcon from '$lib/DivIcon.svelte';
   import { centerPos, bounds, dataFromAPI, zoom, viewPortCoordinates } from '$lib/coordinatesStore';
   import { onMount } from 'svelte';
   import { debounce } from './utils';
   import 'leaflet/dist/leaflet.css';
+import ApIdataDebug from './APIdataDebug.svelte';
 
   const MARKER_ZOOM_LEVEL = 17;
 
   L.Icon.Default.prototype.options = { iconUrl: null, className: 'my-div-icon' };
-  console.log(L);
+  //console.log(L);
 
   const mapOptions = {
     // starting point is Lille (FR)
@@ -19,8 +21,11 @@
     zoom: 11
   };
 
-  //const tileUrl ='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
-  const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+  const tileUrl =
+    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
+  const tileUrl2 = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+  const tileUrl3 = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png'
+  const tileUrl4 = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png';
   const tileLayerOptions = {
     minZoom: 0,
     maxZoom: 20,
@@ -39,7 +44,7 @@
     map = leafletMapElement.getMap();
     map.attributionControl.setPosition('topright');
     dragZoomHandler();
-    console.dir(map);
+    //console.dir(map);
   });
 
   const dragZoomHandler = () => {
@@ -102,9 +107,23 @@
     on:zoomend={debounce(dragZoomHandler, 500)}
     on:resize={debounce(dragZoomHandler, 500)}
   >
-    <TileLayer url={tileUrl} options={tileLayerOptions} />
+    
+    {#if $zoom >= 15}
+      <TileLayer url={tileUrl} options={{...tileLayerOptions, attribution:"Tiles &copy; Esri"}} opacity={1.0}/>
+      <TileLayer url={tileUrl4} options={{...tileLayerOptions, attribution:"&copy; <a href='https://carto.com/attributions'>CARTO</a>"}} opacity={1.0}/>
+    {/if}
+
+    <TileLayer
+      url={tileUrl3}
+      options={tileLayerOptions}
+      opacity={$zoom >= MARKER_ZOOM_LEVEL ? 0.5 : 1.0}
+    />
+
     {#each $dataFromAPI as poi}
       {#if $zoom >= MARKER_ZOOM_LEVEL}
+        {#if poi.shape}
+          <Spot geoJSONdata={[poi.shape]} />
+        {/if}
         <Marker latLng={[poi.coordinates.coordinates[1], poi.coordinates.coordinates[0]]} />
       {:else}
         <Marker
@@ -124,7 +143,7 @@
     <ScaleControl bind:this={scaleControl} position="bottomleft" options={scaleControlOptions} />
   </LeafletMap>
   <div class="over-map absolute right-8 bottom-8">
-    <AddButton/>
+    <AddButton />
   </div>
 </div>
 
@@ -135,7 +154,7 @@
     width: 100vw;
   }
 
-  .over-map{
+  .over-map {
     z-index: 1000;
   }
 
