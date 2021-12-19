@@ -115,7 +115,7 @@ import ApIdataDebug from './APIdataDebug.svelte';
 
     <TileLayer
       url={tileUrl3}
-      options={tileLayerOptions}
+      options={{...tileLayerOptions, attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'}}
       opacity={$zoom >= MARKER_ZOOM_LEVEL ? 0.5 : 1.0}
     />
 
