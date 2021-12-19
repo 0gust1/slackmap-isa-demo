@@ -20,6 +20,21 @@ export interface SlackmapSpot {
   views_count: number;
   _version: number;
 }
+
+export interface SlackmapSpotContent {
+  id: string;
+  rid: string;
+  text: string;
+  lang: string;
+  type: number;
+  subtype: number;
+  created_at: string;
+  _version: number;
+  user_name: string;
+  user_rid: string;
+  item_rid: string;
+}
+
 export interface LocationPathEntity {
   code?: string | null;
   name: string;
