@@ -1,6 +1,5 @@
 <script lang="ts">
   import { browser } from '$app/env';
-  import SideMenu from '$lib/SideMenu.svelte';
   import { onMount } from 'svelte';
 
   let LeafletContainer;
@@ -12,9 +11,6 @@
     }
   });
 </script>
-
-<SideMenu />
-
 
 <div class="bg-gray-500">
   {#if browser}

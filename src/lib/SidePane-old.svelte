@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { sideMenuOpen } from '$lib/menuStore'
+    import { sideMenuOpen } from '$lib/sidePaneStore'
 import ApIdataDebug from './APIdataDebug.svelte';
 
     const closeMenu = ()=>{

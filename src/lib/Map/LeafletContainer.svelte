@@ -9,8 +9,7 @@
   import { debounce } from '../utils';
 
   import 'leaflet/dist/leaflet.css';
-  
-  
+
   const MARKER_ZOOM_LEVEL = 17;
 
   L.Icon.Default.prototype.options = { iconUrl: null, className: 'my-div-icon' };
@@ -25,8 +24,10 @@
   const tileUrl =
     'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
   const tileUrl2 = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-  const tileUrl3 = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}';
-  const tileUrl4 = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png';
+  const tileUrl3 =
+    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}';
+  const tileUrl4 =
+    'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png';
   const tileLayerOptions = {
     minZoom: 0,
     maxZoom: 20,
@@ -104,17 +105,26 @@
     on:zoomend={debounce(dragZoomHandler, 500)}
     on:resize={debounce(dragZoomHandler, 500)}
   >
-    
     {#if $viewPortCoordinates.zoom >= 15}
-      <TileLayer url={tileUrl} options={{...tileLayerOptions, attribution:"Tiles &copy; Esri"}} opacity={1.0}/>
-      <TileLayer url={tileUrl4} options={{...tileLayerOptions, attribution:"&copy; <a href='https://carto.com/attributions'>CARTO</a>"}} opacity={1.0}/>
+      <TileLayer
+        url={tileUrl}
+        options={{ ...tileLayerOptions, attribution: 'Tiles &copy; Esri' }}
+        opacity={1.0}
+      />
+      <TileLayer
+        url={tileUrl4}
+        options={{
+          ...tileLayerOptions,
+          attribution: "&copy; <a href='https://carto.com/attributions'>CARTO</a>"
+        }}
+        opacity={1.0}
+      />
+    {:else}
+      <TileLayer
+        url={tileUrl3}
+        options={{ ...tileLayerOptions, attribution: 'Tiles &copy; Esri' }}
+      />
     {/if}
-
-    <TileLayer
-      url={tileUrl3}
-      options={{...tileLayerOptions, attribution:'Tiles &copy; Esri'}}
-      opacity={$viewPortCoordinates.zoom >= MARKER_ZOOM_LEVEL ? 0.5 : 1.0}
-    />
 
     {#each $dataFromAPI as poi}
       {#if $viewPortCoordinates.zoom >= MARKER_ZOOM_LEVEL}
