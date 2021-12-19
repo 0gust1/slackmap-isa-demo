@@ -34,6 +34,7 @@
   "type": "module",
   "dependencies": {
     "leaflet-providers": "^1.13.0",
+    "svelte-hero-icons": "^3.1.2",
     "svelte-leafletjs": "^0.8.0"
   }
 }
