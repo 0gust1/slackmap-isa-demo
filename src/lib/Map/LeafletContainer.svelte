@@ -4,12 +4,13 @@
   import Spot from '$lib/Map/Spot.svelte';
   import AddButton from './AddButton.svelte';
   import DivIcon from '$lib/Map/DivIcon.svelte';
-  import { centerPos, bounds, dataFromAPI, zoom, viewPortCoordinates } from '$lib/Map/coordinatesStore';
+  import { dataFromAPI, viewPortCoordinates } from '$lib/Map/coordinatesStore';
   import { onMount } from 'svelte';
   import { debounce } from '../utils';
-  import 'leaflet/dist/leaflet.css';
-import ApIdataDebug from '../APIdataDebug.svelte';
 
+  import 'leaflet/dist/leaflet.css';
+  
+  
   const MARKER_ZOOM_LEVEL = 17;
 
   L.Icon.Default.prototype.options = { iconUrl: null, className: 'my-div-icon' };
@@ -52,10 +53,6 @@ import ApIdataDebug from '../APIdataDebug.svelte';
     const center = map.getCenter();
     const mapBounds = map.getBounds();
     const mapZoom = map.getZoom();
-
-    centerPos.set(center);
-    bounds.set(mapBounds);
-    zoom.set(mapZoom);
 
     viewPortCoordinates.set({
       centerPos: center,
@@ -108,7 +105,7 @@ import ApIdataDebug from '../APIdataDebug.svelte';
     on:resize={debounce(dragZoomHandler, 500)}
   >
     
-    {#if $zoom >= 15}
+    {#if $viewPortCoordinates.zoom >= 15}
       <TileLayer url={tileUrl} options={{...tileLayerOptions, attribution:"Tiles &copy; Esri"}} opacity={1.0}/>
       <TileLayer url={tileUrl4} options={{...tileLayerOptions, attribution:"&copy; <a href='https://carto.com/attributions'>CARTO</a>"}} opacity={1.0}/>
     {/if}
@@ -116,11 +113,11 @@ import ApIdataDebug from '../APIdataDebug.svelte';
     <TileLayer
       url={tileUrl3}
       options={{...tileLayerOptions, attribution:'Tiles &copy; Esri'}}
-      opacity={$zoom >= MARKER_ZOOM_LEVEL ? 0.5 : 1.0}
+      opacity={$viewPortCoordinates.zoom >= MARKER_ZOOM_LEVEL ? 0.5 : 1.0}
     />
 
     {#each $dataFromAPI as poi}
-      {#if $zoom >= MARKER_ZOOM_LEVEL}
+      {#if $viewPortCoordinates.zoom >= MARKER_ZOOM_LEVEL}
         {#if poi.shape}
           <Spot geoJSONdata={[poi.shape]} />
         {/if}
