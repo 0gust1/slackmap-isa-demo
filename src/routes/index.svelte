@@ -8,7 +8,7 @@
   // we have to dynamically import the map component, because the server-side rendering complains about the window object (because of Leaflet)
   onMount(async () => {
     if (browser) {
-      LeafletContainer = (await import('$lib/LeafletContainer.svelte')).default;
+      LeafletContainer = (await import('$lib/Map/LeafletContainer.svelte')).default;
     }
   });
 </script>

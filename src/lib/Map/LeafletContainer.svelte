@@ -1,14 +1,14 @@
 <script>
   import L from 'leaflet';
   import { LeafletMap, TileLayer, Marker, ScaleControl } from 'svelte-leafletjs';
-  import Spot from '$lib/Spot.svelte';
+  import Spot from '$lib/Map/Spot.svelte';
   import AddButton from './AddButton.svelte';
-  import DivIcon from '$lib/DivIcon.svelte';
-  import { centerPos, bounds, dataFromAPI, zoom, viewPortCoordinates } from '$lib/coordinatesStore';
+  import DivIcon from '$lib/Map/DivIcon.svelte';
+  import { centerPos, bounds, dataFromAPI, zoom, viewPortCoordinates } from '$lib/Map/coordinatesStore';
   import { onMount } from 'svelte';
-  import { debounce } from './utils';
+  import { debounce } from '../utils';
   import 'leaflet/dist/leaflet.css';
-import ApIdataDebug from './APIdataDebug.svelte';
+import ApIdataDebug from '../APIdataDebug.svelte';
 
   const MARKER_ZOOM_LEVEL = 17;
 

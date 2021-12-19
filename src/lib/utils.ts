@@ -1,4 +1,4 @@
-export const debounce = (callback, timeout) => {
+export const debounce = (callback: CallableFunction, timeout: number) => {
   let id;
   return (...args) => {
     clearTimeout(id);

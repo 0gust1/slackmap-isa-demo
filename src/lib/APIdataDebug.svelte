@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { dataFromAPI, features } from '$lib/coordinatesStore';
+	import { dataFromAPI } from '$lib/Map/coordinatesStore';
 </script>
 
 <div class="overflow-scroll h-screen">

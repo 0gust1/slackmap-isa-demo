@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { centerPos, bounds, zoom } from '$lib/coordinatesStore';
+  import { centerPos, bounds, zoom } from '$lib/Map/coordinatesStore';
 </script>
 
 <div class="text-xs">
