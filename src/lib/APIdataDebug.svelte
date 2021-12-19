@@ -2,7 +2,7 @@
 	import { dataFromAPI } from '$lib/Map/coordinatesStore';
 </script>
 
-<div class="overflow-scroll max-h-screen">
+<div class="">
     <p>
     {$dataFromAPI.length} markers (clusters or spots)
     </p>

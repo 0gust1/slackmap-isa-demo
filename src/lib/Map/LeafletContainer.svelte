@@ -157,7 +157,7 @@
 <style lang="postcss">
   .leaflet-container {
     /*  height: 100vh; */
-    height: calc(100vh - theme(spacing.8));
+    height: calc(100vh - theme(spacing.14));
     width: 100vw;
   }
 
