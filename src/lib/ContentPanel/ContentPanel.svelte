@@ -1,24 +1,41 @@
 <script lang="ts">
-  import { Icon, ChevronUp } from 'svelte-hero-icons';
-  import { contentPaneOpen } from '$lib/ContentPanel/contentPaneStore';
+  import { Icon, ChevronDown } from 'svelte-hero-icons';
+  import {
+    contentPaneOpen,
+    contentFromAPI,
+    contentLoading
+  } from '$lib/ContentPanel/contentPaneStore';
+
+  const closePanel = () => {
+    contentPaneOpen.set(false);
+  };
 </script>
 
 {#if $contentPaneOpen}
-<div class="smap-content-panel">
-  <button type="button" class="w-full">
-    <Icon src={ChevronUp} class="wh6 h-6 text-gray-700" />
-  </button>
-
-  <p>Content panel</p>
-  <p>Another content</p>
-  <p>Content again</p>
-</div>
+  <div class="smap-content-panel">
+    <button type="button" on:click={closePanel} class="w-full">
+      <Icon src={ChevronDown} class="wh6 h-6 text-gray-700" />
+    </button>
+    {#if $contentLoading}
+      loading...
+    {:else}
+      <section class="content">
+        <p>
+          {JSON.stringify($contentFromAPI, null, 2)}
+        </p>
+      </section>
+    {/if}
+  </div>
 {/if}
 
 <style lang="postcss">
   .smap-content-panel {
     z-index: 10000;
-    @apply absolute bg-gray-400 w-full shadow-2xl rounded-t-md p-2;
+    @apply absolute max-h-screen bg-gray-400 w-full shadow-2xl rounded-t-md p-2;
+    @apply text-xs;
     inset: auto auto 0 auto;
+  }
+  .content {
+    @apply overflow-y-auto;
   }
 </style>

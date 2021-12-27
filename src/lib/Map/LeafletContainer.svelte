@@ -8,6 +8,8 @@
   import { onMount } from 'svelte';
   import { debounce } from '../utils';
 
+  import { contentPaneOpen, spotReferenceId } from '$lib/ContentPanel/contentPaneStore'
+
   import 'leaflet/dist/leaflet.css';
 
   const MARKER_ZOOM_LEVEL = 17;
@@ -93,6 +95,13 @@
     };
   };
 
+  const spotClickHandler = (rid) => {
+    console.log("spot clciker !")
+    console.log(rid)
+    spotReferenceId.set(rid);
+    contentPaneOpen.set(true);
+  }
+
   const debouncedDragZoomHandler = debounce(dragZoomHandler, 300);
 </script>
 
@@ -129,7 +138,10 @@
     {#each $dataFromAPI as poi}
       {#if $viewPortCoordinates.zoom >= MARKER_ZOOM_LEVEL}
         {#if poi.shape}
-          <Spot geoJSONdata={[poi.shape]} />
+          <Spot geoJSONdata={[poi.shape]}
+          events={['click']} 
+          on:click={()=>{spotClickHandler(poi.rid)}}
+          />
         {/if}
         <Marker latLng={[poi.coordinates.coordinates[1], poi.coordinates.coordinates[0]]} />
       {:else}

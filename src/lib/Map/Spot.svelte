@@ -1,9 +1,8 @@
 <script>
   import { createEventDispatcher, getContext, onDestroy, setContext } from 'svelte';
   import L from 'leaflet';
-  import EventBridge from 'svelte-leafletjs';
+  import EventBridge from './eventBridge';
   import { onMount } from 'svelte';
-  //import EventBridge from '../lib/EventBridge';
 
   const { getMap } = getContext(L);
 
@@ -20,20 +19,18 @@
   const dispatch = createEventDispatcher();
   let eventBridge;
 
-  console.log("geoJSONdata")
-  console.log(geoJSONdata)
-
-  onMount(()=>{
+  $: {
     if (!geojson) {
       geojson = L.geoJSON(null, options).addTo(getMap());
-      //eventBridge = new EventBridge(geojson, dispatch, events);
+      eventBridge = new EventBridge(geojson, dispatch, events);
     }
+
     geojson.clearLayers();
     geojson.addData(geoJSONdata);
-  });
+  }
 
   onDestroy(() => {
-    //eventBridge.unregister();
+    eventBridge.unregister();
     geojson.removeFrom(getMap());
   });
 
