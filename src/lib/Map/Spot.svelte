@@ -2,7 +2,6 @@
   import { createEventDispatcher, getContext, onDestroy, setContext } from 'svelte';
   import L from 'leaflet';
   import EventBridge from './eventBridge';
-  import { onMount } from 'svelte';
 
   const { getMap } = getContext(L);
 

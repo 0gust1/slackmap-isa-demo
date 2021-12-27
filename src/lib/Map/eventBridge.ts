@@ -1,4 +1,5 @@
 export default class EventBridge {
+    entity;
 
     constructor(entity, dispatch, events = []) {
         this.entity = entity;

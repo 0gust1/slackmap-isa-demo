@@ -1,7 +1,7 @@
 // Here the reactive svelte stores handling the maps coordinates and the
 import { derived, writable } from 'svelte/store';
 import type { Readable, Writable } from 'svelte/store';
-import type { SlackmapCluster, SlackmapSpot } from '$lib/slackMapApiTypes';
+import type { SlackmapCluster, SlackmapSpot } from '$lib/slackMapAPITypes';
 type LeafletBounds = {
   _southWest: LeafletCoords;
   _northEast: LeafletCoords;

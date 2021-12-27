@@ -18,7 +18,11 @@
   //console.log(L);
 
   const mapOptions = {
-    // starting point is Lille (FR)
+    // TODO: Default map options
+    // right now, the starting point is Lille (FR)
+    // we should: 
+    //   plug to the geolocatiuon API of the browser
+    //   manage the map position using localStorage (s)
     center: [50.64118957519531, 3.0376534461975098],
     zoom: 11
   };
