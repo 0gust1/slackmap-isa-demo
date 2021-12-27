@@ -1,5 +1,7 @@
 <script lang="ts">
     import {Icon, Annotation, Bookmark, Cog, Terminal} from "svelte-hero-icons";
+    import Portal from "svelte-portal/src/Portal.svelte"
+    import ApIdataDebug from "./APIdataDebug.svelte";
     import {sidePaneOpen } from '$lib/sidePaneStore'
     const openSidePane = ()=>{
         sidePaneOpen.set(true)
@@ -34,6 +36,10 @@
         </li>
     </ul>
 </nav>
+
+<Portal target='#smap-side-pane-content'>
+    <ApIdataDebug/>
+</Portal>
 
 <style lang='postcss'>
 button {

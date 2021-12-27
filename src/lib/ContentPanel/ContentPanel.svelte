@@ -12,7 +12,7 @@
 </script>
 
 {#if $contentPaneOpen}
-  <div class="smap-content-panel">
+  <div id="smap-content-panel" class="smap-content-panel">
     <button type="button" on:click={closePanel} class="w-full">
       <Icon src={ChevronDown} class="wh6 h-6 text-gray-700" />
     </button>
