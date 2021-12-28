@@ -111,6 +111,8 @@ export interface SlackmapSpot {
   _version: number;
 }
 
+
+
 export type ContentSubtype =
   ItemSubtype.CONTENT_ACCESS |
   ItemSubtype.CONTENT_ANCHORS |
@@ -130,6 +132,24 @@ export interface SlackmapSpotContent {
   user_name: string;
   user_rid: string;
   item_rid: string;
+}
+
+export interface SpotEntity {
+  id: string;
+  rid: string;
+  name: string;
+  description: string;
+  length: number;
+  type: number;
+  subtype: number;
+  location_path?: (LocationPathEntity)[] | null;
+  access: number;
+  coordinates: Coordinates;
+  shape: Shape;
+  created_at: string;
+  views_count: number;
+  _version: number;
+  photos?: (string)[] | null;
 }
 
 export interface LocationPathEntity {
