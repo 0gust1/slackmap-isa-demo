@@ -74,22 +74,6 @@
     });
   };
 
-  const getSpotMarkerHtml = (poi: SlackmapSpot) => {
-    if (poi.subtype <= 8) {
-      return `<div class="spot-icon">
-        <span class="spot-icon-length">${Math.round(poi.length)}m</span>
-      </div>`;
-    } else {
-      return '';
-    }
-  };
-
-  const spotClickHandler = (rid) => {
-    console.log('spot clciker !');
-    console.log(rid);
-    spotReferenceId.set(rid);
-    contentPaneOpen.set(true);
-  };
 </script>
 
 <div class="relative leaflet-container">

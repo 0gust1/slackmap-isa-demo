@@ -33,7 +33,7 @@
     @apply absolute w-2/5 bg-gray-200 px-4 shadow-2xl;
     top:0px;
     right:0px;
-    transition: transform 0.3s;
+    transition: transform 0.05s;
   }
 
   .smap-side-pane.opened {

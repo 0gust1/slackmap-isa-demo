@@ -5,6 +5,7 @@
     contentFromAPI,
     contentLoading
   } from '$lib/ContentPanel/contentPaneStore';
+  import SpotContent from './SpotContent.svelte';
 
   const closePanel = () => {
     contentPaneOpen.set(false);
@@ -19,15 +20,7 @@
     {#if $contentLoading}
       loading...
     {:else}
-      <section class="content">
-        {#if $contentFromAPI && $contentFromAPI.length > 0}
-        <p>
-          {JSON.stringify($contentFromAPI, null, 2)}
-        </p>
-        {:else}
-        <p>No content was set for this spot</p>
-        {/if}
-      </section>
+    <SpotContent spotContent={$contentFromAPI}/>
     {/if}
   </div>
 {/if}

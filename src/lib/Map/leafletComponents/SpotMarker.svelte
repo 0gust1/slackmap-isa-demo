@@ -23,8 +23,6 @@
   };
 
   const spotClickHandler = (rid) => {
-    console.log('spot clciker !');
-    console.log(rid);
     spotReferenceId.set(rid);
     contentPaneOpen.set(true);
   };
