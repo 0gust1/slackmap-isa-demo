@@ -20,9 +20,13 @@
       loading...
     {:else}
       <section class="content">
+        {#if $contentFromAPI && $contentFromAPI.length > 0}
         <p>
           {JSON.stringify($contentFromAPI, null, 2)}
         </p>
+        {:else}
+        <p>No content was set for this spot</p>
+        {/if}
       </section>
     {/if}
   </div>

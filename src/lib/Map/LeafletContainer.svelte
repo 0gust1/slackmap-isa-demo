@@ -1,14 +1,16 @@
-<script>
+<script lang="ts">
+  import type { SlackmapSpot } from '$lib/slackMapAPITypes';
+
   import L from 'leaflet';
-  import { LeafletMap, TileLayer, Marker, ScaleControl } from 'svelte-leafletjs';
-  import Spot from '$lib/Map/Spot.svelte';
+  import { LeafletMap, TileLayer, ScaleControl } from 'svelte-leafletjs';
   import AddButton from './AddButton.svelte';
-  import DivIcon from '$lib/Map/DivIcon.svelte';
+  import ClusterMarker from './leafletComponents/ClusterMarker.svelte';
+  import SpotMarker from './leafletComponents/SpotMarker.svelte';
   import { dataFromAPI, viewPortCoordinates } from '$lib/Map/coordinatesStore';
   import { onMount } from 'svelte';
   import { debounce } from '../utils';
 
-  import { contentPaneOpen, spotReferenceId } from '$lib/ContentPanel/contentPaneStore'
+  import { contentPaneOpen, spotReferenceId } from '$lib/ContentPanel/contentPaneStore';
 
   import 'leaflet/dist/leaflet.css';
 
@@ -20,7 +22,7 @@
   const mapOptions = {
     // TODO: Default map options
     // right now, the starting point is Lille (FR)
-    // we should: 
+    // we should:
     //   plug to the geolocatiuon API of the browser
     //   manage the map position using localStorage (s)
     center: [50.64118957519531, 3.0376534461975098],
@@ -56,6 +58,10 @@
   });
 
   const dragZoomHandler = () => {
+    // close contentpane
+
+    contentPaneOpen.set(false);
+
     // after a map drag or zoom, update the reactive stores with new map center and bounds
     const center = map.getCenter();
     const mapBounds = map.getBounds();
@@ -68,45 +74,22 @@
     });
   };
 
-  const getClusterSize = (spotCount) => {
-    return spotCount * 10;
-  };
-
-  const getClusterMarkerHtml = (spotCount) => {
-    let cssClass = '';
-    if (spotCount > 10) {
-      if (spotCount > 100) {
-        cssClass = 'cluster100';
-      } else {
-        cssClass = 'cluster10';
-      }
+  const getSpotMarkerHtml = (poi: SlackmapSpot) => {
+    if (poi.subtype <= 8) {
+      return `<div class="spot-icon">
+        <span class="spot-icon-length">${Math.round(poi.length)}m</span>
+      </div>`;
     } else {
-      cssClass = 'cluster1';
+      return '';
     }
-    return `
-    <div class="clusterIcon ${cssClass}">
-    <span class="count">${spotCount}</span>
-    </div>
-    `;
-  };
-
-  const getZoomTo = (poi) => {
-    return () => {
-      map.setView(
-        { lat: poi.coordinates.coordinates[1], lng: poi.coordinates.coordinates[0] },
-        poi.expansion_zoom
-      );
-    };
   };
 
   const spotClickHandler = (rid) => {
-    console.log("spot clciker !")
-    console.log(rid)
+    console.log('spot clciker !');
+    console.log(rid);
     spotReferenceId.set(rid);
     contentPaneOpen.set(true);
-  }
-
-  const debouncedDragZoomHandler = debounce(dragZoomHandler, 300);
+  };
 </script>
 
 <div class="relative leaflet-container">
@@ -141,26 +124,9 @@
 
     {#each $dataFromAPI as poi}
       {#if $viewPortCoordinates.zoom >= MARKER_ZOOM_LEVEL}
-        {#if poi.shape}
-          <Spot geoJSONdata={[poi.shape]}
-          events={['click']} 
-          on:click={()=>{spotClickHandler(poi.rid)}}
-          />
-        {/if}
-        <Marker latLng={[poi.coordinates.coordinates[1], poi.coordinates.coordinates[0]]} />
+        <SpotMarker {poi} />
       {:else}
-        <Marker
-          events={['click']}
-          on:click={getZoomTo(poi)}
-          latLng={[poi.coordinates.coordinates[1], poi.coordinates.coordinates[0]]}
-        >
-          <DivIcon
-            options={{
-              className: '',
-              html: getClusterMarkerHtml(poi.spot_count)
-            }}
-          />
-        </Marker>
+        <ClusterMarker {poi} />
       {/if}
     {/each}
     <ScaleControl bind:this={scaleControl} position="bottomleft" options={scaleControlOptions} />
@@ -179,31 +145,5 @@
 
   .over-map {
     z-index: 1000;
-  }
-
-  :global(.clusterIcon) {
-    @apply w-10 h-10 rounded-full flex justify-center items-center flex-col;
-  }
-  :global(.count) {
-    @apply w-8 h-8 rounded-full bg-opacity-40
-    flex justify-center items-center text-center text-xs font-medium text-gray-700;
-  }
-  :global(.cluster1) {
-    @apply bg-green-500 bg-opacity-30;
-  }
-  :global(.cluster1 .count) {
-    @apply bg-green-500 bg-opacity-70;
-  }
-  :global(.cluster10) {
-    @apply bg-yellow-500 bg-opacity-30;
-  }
-  :global(.cluster10 .count) {
-    @apply bg-yellow-500 bg-opacity-70;
-  }
-  :global(.cluster100) {
-    @apply bg-red-500 bg-opacity-30;
-  }
-  :global(.cluster100 .count) {
-    @apply bg-red-500 bg-opacity-70;
   }
 </style>
